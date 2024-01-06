@@ -67,6 +67,25 @@
 		<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
 		<script>
+			function getArrivals()
+			{
+				var code = $("#txtStop").val();
+
+				const settings = {
+				  "async": true,
+				  "crossDomain": true,
+				  "url": "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=" + code,
+				  "method": "GET",
+				  "headers": {
+				    "accountKey": "xxx",
+				    "Content-Type": "application/json"				  
+					}
+				};
+
+				$.ajax(settings).done(function (response) {
+				  console.log(response);
+				});		
+			}
 
 		</script>
 	</head>
@@ -75,7 +94,7 @@
 		<div id="container">
 			<div id="stop">
 				<input type="number" id="txtStop" placeholder="e.g, 9810007" />
-				<button id="btnSearchStop">FIND THIS STOP</button>
+				<button id="btnSearchStop" onclick="getArrivals()">FIND THIS STOP</button>
 			</div>
 
 			<br/>
