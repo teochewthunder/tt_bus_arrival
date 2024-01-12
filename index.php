@@ -1,35 +1,43 @@
 <?php
- //header("Access-Control-Allow-Origin: http://www.teochewthunder.com");
- //header("Access-Control-Allow-Credentials: true");
+	$buses = [];
 
- $curl = curl_init();
+	if (isset($_POST["btnFindStop"]))
+	{
+		$curl = curl_init();
 
-curl_setopt_array($curl, [
-  CURLOPT_URL => "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=83139",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "GET",
-  CURLOPT_POSTFIELDS => "",
-  CURLOPT_HTTPHEADER => [
-    "Content-Type: application/json",
-    "accountKey: xxx=="
-  ],
-]);
+		curl_setopt_array(
+			$curl, 
+			[
+				CURLOPT_URL => "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=" . $_POST["txtStop"],
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => "",
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 30,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => "GET",
+				CURLOPT_POSTFIELDS => "",
+				CURLOPT_HTTPHEADER => 
+			  	[
+			    		"Content-Type: application/json",
+			    		"accountKey: xxx=="
+			  	],
+			]
+		);
 
-$response = curl_exec($curl);
-$err = curl_error($curl);
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
 
-curl_close($curl);
+		curl_close($curl);
 
-if ($err) {
-  echo "cURL Error #:" . $err;
-} else {
-  echo $response;
-}
+		if ($err) {
+			echo "cURL Error #:" . $err;
+		} else {
+			$obj = json_decode($response);
+			$buses = $obj->Services;
+		}
+	}
 ?>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -99,23 +107,6 @@ if ($err) {
 		<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
 		<script>
-			function getArrivals()
-			{
-const settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=83139",
-  "method": "GET",
-  "headers": {
-    "accountKey": "jA6FF90AQqSbpAPRs9XJAg==",
-    "Content-Type": "application/json"
-  }
-};
-
-$.ajax(settings).done(function (response) {
-  console.log(response);
-});
-			}
 
 		</script>
 	</head>
@@ -123,23 +114,54 @@ $.ajax(settings).done(function (response) {
 	<body>
 		<div id="container">
 			<div id="stop">
-				<input type="number" id="txtStop" placeholder="e.g, 9810007" />
-				<button id="btnSearchStop" onclick="getArrivals()">FIND THIS STOP</button>
+				<form method="POST">
+					<input type="number" name="txtStop" placeholder="e.g, 9810007" />
+					<button name="btnFindStop" onclick="getArrivals()">FIND THIS STOP</button>
+				</form>
 			</div>
 
 			<br/>
 
-			<div id="bus">
-				<button>182</button>
-				<button>55</button>
+			<div id="bus" style="display:<?php echo (count($buses) == 0 ? "none" : "block");?>">
+				<?php 
+					foreach($buses as $bus)
+					{
+				?>
+					<button>
+						<?php 
+							echo $bus->ServiceNo;
+						?>
+					</button>		
+				<?php		
+					}
+				?>
 			</div>
 
 			<br/>
 
-			<div id="arrival">
-				<h1 id="number">BUS 182 ARRIVAL TIMINGS</h1>
-				<p>test1</p>
-				<p>test2</p>
+			<div id="arrival" style="display:<?php echo (count($buses) == 0 ? "none" : "block");?>">
+				<?php 
+					foreach($buses as $bus)
+					{
+				?>
+					<h1 id="number">BUS <?php echo $bus->ServiceNo; ?> ARRIVAL TIMINGS</h1>
+				<?php 
+						if ($bus->NextBus)
+						{
+							echo "<p>" . $bus->NextBus->EstimatedArrival . (date("h:i", strtotime($bus->NextBus->EstimatedArrival))) . "</p>";
+						}
+
+						if ($bus->NextBus2)
+						{
+							echo "<p>" . $bus->NextBus2->EstimatedArrival . "</p>";
+						}
+
+						if ($bus->NextBus3)
+						{
+							echo "<p>" . $bus->NextBus->EstimatedArrival . "</p>";
+						}			
+					}
+				?>				
 			</div>
 		</div>
 	</body>
