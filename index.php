@@ -18,8 +18,8 @@
 				CURLOPT_POSTFIELDS => "",
 				CURLOPT_HTTPHEADER => 
 			  	[
-			    		"Content-Type: application/json",
-			    		"accountKey: xxx=="
+			    	"Content-Type: application/json",
+			    	"accountKey: xxx=="
 			  	],
 			]
 		);
@@ -35,6 +35,12 @@
 			$obj = json_decode($response);
 			$buses = $obj->Services;
 		}
+	}
+
+	function formatArrivalTime($strTime)
+	{
+		$newStr = str_replace("+08:00", "", $strTime);
+		return date("h:i a", strtotime($newStr));
 	}
 ?>
 
@@ -104,10 +110,19 @@
 			}
 		</style>
 
-		<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-
 		<script>
+			function showArrivalFor($bus)
+			{
+				var hide = document.getElementsByClassName("arrival");
 
+				for (var i = 0; i < hide.length; i++)
+				{
+					hide[i].style.display = "none";
+				}
+
+				var show = document.getElementById("arrival_" + $bus);
+				show.style.display = "block";
+			}
 		</script>
 	</head>
 
@@ -127,7 +142,7 @@
 					foreach($buses as $bus)
 					{
 				?>
-					<button>
+					<button onclick="showArrivalFor('<?php echo $bus->ServiceNo; ?>');">
 						<?php 
 							echo $bus->ServiceNo;
 						?>
@@ -137,32 +152,34 @@
 				?>
 			</div>
 
-			<br/>
-
-			<div id="arrival" style="display:<?php echo (count($buses) == 0 ? "none" : "block");?>">
-				<?php 
-					foreach($buses as $bus)
+			<br />
+			
+			<?php 
+				foreach($buses as $bus)
+				{
+			?>
+				<div id="arrival_<?php echo $bus->ServiceNo; ?>" class="arrival" style="display:none">
+				<h1 id="number">BUS <?php echo $bus->ServiceNo; ?> ARRIVAL TIMINGS</h1>
+			<?php 
+					if ($bus->NextBus)
 					{
-				?>
-					<h1 id="number">BUS <?php echo $bus->ServiceNo; ?> ARRIVAL TIMINGS</h1>
-				<?php 
-						if ($bus->NextBus)
-						{
-							echo "<p>" . $bus->NextBus->EstimatedArrival . (date("h:i", strtotime($bus->NextBus->EstimatedArrival))) . "</p>";
-						}
-
-						if ($bus->NextBus2)
-						{
-							echo "<p>" . $bus->NextBus2->EstimatedArrival . "</p>";
-						}
-
-						if ($bus->NextBus3)
-						{
-							echo "<p>" . $bus->NextBus->EstimatedArrival . "</p>";
-						}			
+						echo "<p>" . formatArrivalTime($bus->NextBus->EstimatedArrival) . "</p>";
 					}
-				?>				
-			</div>
+
+					if ($bus->NextBus2)
+					{
+						echo "<p>" . formatArrivalTime($bus->NextBus2->EstimatedArrival) . "</p>";
+					}
+
+					if ($bus->NextBus3)
+					{
+						echo "<p>" . formatArrivalTime($bus->NextBus3->EstimatedArrival) . "</p>";
+					}
+			?>
+				</div>
+			<?php			
+				}
+			?>				
 		</div>
 	</body>
 </html>
