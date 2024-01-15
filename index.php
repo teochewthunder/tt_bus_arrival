@@ -40,7 +40,7 @@
 	function formatArrivalTime($strTime)
 	{
 		$newStr = str_replace("+08:00", "", $strTime);
-		return date("h:i a", strtotime($newStr));
+		return date("h:i A", strtotime($newStr));
 	}
 ?>
 
@@ -60,7 +60,7 @@
 			{
 				border-radius: 20px;
 				border: 3px solid rgba(255, 255, 255, 0.8);
-				padding: 1em;
+				padding: 2em;
 			}
 
 			#container div
@@ -68,6 +68,7 @@
 				border-radius: 20px;
 				border: 3px solid rgba(255, 255, 255, 0.2);
 				padding: 0.5em;
+				color: rgb(255, 255, 255);
 			}
 
 			#stop input
@@ -129,6 +130,7 @@
 	<body>
 		<div id="container">
 			<div id="stop">
+				<h1>&#128655; BUS STOP</h1>
 				<form method="POST">
 					<input type="number" name="txtStop" placeholder="e.g, 9810007" />
 					<button name="btnFindStop" onclick="getArrivals()">FIND THIS STOP</button>
@@ -138,6 +140,7 @@
 			<br/>
 
 			<div id="bus" style="display:<?php echo (count($buses) == 0 ? "none" : "block");?>">
+				<h1>&#128652; BUS SERVICES</h1>
 				<?php 
 					foreach($buses as $bus)
 					{
@@ -153,13 +156,13 @@
 			</div>
 
 			<br />
-			
+
 			<?php 
 				foreach($buses as $bus)
 				{
 			?>
 				<div id="arrival_<?php echo $bus->ServiceNo; ?>" class="arrival" style="display:none">
-				<h1 id="number">BUS <?php echo $bus->ServiceNo; ?> ARRIVAL TIMINGS</h1>
+				<h1>&#128336; BUS <?php echo $bus->ServiceNo; ?> ARRIVAL TIMINGS</h1>
 			<?php 
 					if ($bus->NextBus)
 					{
