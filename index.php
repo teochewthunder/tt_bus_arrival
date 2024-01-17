@@ -19,7 +19,7 @@
 				CURLOPT_HTTPHEADER => 
 			  	[
 			    	"Content-Type: application/json",
-			    	"accountKey: xxx=="
+			    	"accountKey: x=="
 			  	],
 			]
 		);
@@ -52,23 +52,24 @@
 		<style>
 			body
 			{
-				background-color: rgb(100, 0, 0);
+				background-color: rgb(255, 255, 255);
 				font-family: sans-serif;
+				font-size: 16px;
 			}
 
 			#container
 			{
 				border-radius: 20px;
-				border: 3px solid rgba(255, 255, 255, 0.8);
+				border: 3px solid rgba(100, 0, 0, 0.8);
 				padding: 2em;
 			}
 
 			#container div
 			{
 				border-radius: 20px;
-				border: 3px solid rgba(255, 255, 255, 0.2);
+				border: 3px solid rgba(100, 0, 0, 0.2);
 				padding: 0.5em;
-				color: rgb(255, 255, 255);
+				color: rgb(0, 0, 0);
 			}
 
 			#stop input
@@ -98,16 +99,11 @@
 				background-color: rgb(50, 0, 0);
 				color: rgb(255, 255, 255);
 				border-radius: 5px;
-				border: 3px solid rgba(255, 255, 255, 0.5);
+				border: 3px solid rgba(0, 0, 0, 0.5);
 				padding: 5px;
 				width: 5em;
 				font-size: 20px;
 				font-weight: bold;
-			}
-
-			#arrival
-			{
-				color: rgb(255, 255, 255);
 			}
 		</style>
 
