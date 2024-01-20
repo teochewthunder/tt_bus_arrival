@@ -1,14 +1,16 @@
 <?php
 	$buses = [];
+	$busStop = "";
 
 	if (isset($_POST["btnFindStop"]))
 	{
+		$busStop = $_POST["txtStop"];
 		$curl = curl_init();
 
 		curl_setopt_array(
 			$curl, 
 			[
-				CURLOPT_URL => "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=" . $_POST["txtStop"],
+				CURLOPT_URL => "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=" . $busStop,
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_ENCODING => "",
 				CURLOPT_MAXREDIRS => 10,
@@ -19,7 +21,7 @@
 				CURLOPT_HTTPHEADER => 
 			  	[
 			    	"Content-Type: application/json",
-			    	"accountKey: x=="
+			    	"accountKey: xxx=="
 			  	],
 			]
 		);
@@ -126,7 +128,7 @@
 	<body>
 		<div id="container">
 			<div id="stop">
-				<h1>&#128655; BUS STOP</h1>
+				<h1>&#128655; BUS STOP <?php echo $busStop;?></h1>
 				<form method="POST">
 					<input type="number" name="txtStop" placeholder="e.g, 9810007" />
 					<button name="btnFindStop" onclick="getArrivals()">FIND THIS STOP</button>
@@ -162,17 +164,17 @@
 			<?php 
 					if ($bus->NextBus)
 					{
-						echo "<p>" . formatArrivalTime($bus->NextBus->EstimatedArrival) . "</p>";
+						echo "<h2>" . formatArrivalTime($bus->NextBus->EstimatedArrival) . "</h2>";
 					}
 
 					if ($bus->NextBus2)
 					{
-						echo "<p>" . formatArrivalTime($bus->NextBus2->EstimatedArrival) . "</p>";
+						echo "<h2>" . formatArrivalTime($bus->NextBus2->EstimatedArrival) . "</h2>";
 					}
 
 					if ($bus->NextBus3)
 					{
-						echo "<p>" . formatArrivalTime($bus->NextBus3->EstimatedArrival) . "</p>";
+						echo "<h2>" . formatArrivalTime($bus->NextBus3->EstimatedArrival) . "</h2>";
 					}
 			?>
 				</div>
