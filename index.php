@@ -131,7 +131,7 @@
 				<h1>&#128655; BUS STOP <?php echo $busStop;?></h1>
 				<form method="POST">
 					<input type="number" name="txtStop" placeholder="e.g, 9810007" />
-					<button name="btnFindStop" onclick="getArrivals()">FIND THIS STOP</button>
+					<button name="btnFindStop">FIND THIS STOP</button>
 				</form>
 			</div>
 
