@@ -10,7 +10,8 @@
 		curl_setopt_array(
 			$curl, 
 			[
-				CURLOPT_URL => "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=" . $busStop,
+				//CURLOPT_URL => "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=" . $busStop,
+				CURLOPT_URL => "https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=" . $busStop,			
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_ENCODING => "",
 				CURLOPT_MAXREDIRS => 10,
